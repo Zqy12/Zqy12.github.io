@@ -1,0 +1,156 @@
+
+//内层图片的宽度
+@in-image-width:200px;
+
+//外层图片的宽度
+@out-image-width:@in-image-width*1.5;
+
+//立方体效果
+#box-effect{
+
+  //前面
+  .front-effect (@space:@in-image-width/2, @duration:5s) {
+    transform: translateZ(@space);
+    transition: all @duration;
+  }
+  //后面
+  .back-effect (@space:@in-image-width/2, @duration:5s) {
+    transform: translateZ(-@space);
+    transition: all @duration;
+  }
+  //左面
+  .left-effect(@space:@in-image-width/2, @duration:5s){
+    transform: rotateY(90deg) translateZ(-@space);
+    transition: all @duration;
+  }
+
+  //右面
+  .right-effect(@space:@in-image-width/2, @duration:5s){
+    transform: rotateY(90deg) translateZ(@space);
+    transition: all @duration;
+  }
+
+  //上面
+  .top-effect(@space:@in-image-width/2, @duration:5s){
+    transform: rotateX(90deg) translateZ(@space);
+    transition: all @duration;
+  }
+
+  //下面
+  .bottom-effect(@space:@in-image-width/2, @duration:5s){
+    transform: rotateX(90deg) translateZ(-@space);
+    transition: all @duration;
+  }
+
+  //容器的动画效果
+  .container-effect{
+    animation: box-animate 10s infinite;
+  }
+}
+
+//设置内层小立方体的效果
+.in-box-effect(@space:@in-image-width/2, @duration:5s){
+  .in-image:first-child{
+    #box-effect > .front-effect(@space,@duration);
+  }
+
+  .in-image:nth-child(2){
+    #box-effect > .back-effect(@space,@duration);
+  }
+
+  .in-image:nth-child(3){
+    #box-effect > .left-effect(@space,@duration);
+  }
+
+  .in-image:nth-child(4){
+    #box-effect > .right-effect(@space,@duration);
+  }
+
+  .in-image:nth-child(5){
+    #box-effect > .top-effect(@space,@duration);
+  }
+
+  .in-image:nth-child(6){
+    #box-effect > .bottom-effect(@space,@duration);
+  }
+}
+
+//设置外层立方体的效果
+.out-box-effect(@space:@out-image-width/2, @duration:5s){
+  .out-image:nth-child(7){
+    #box-effect > .front-effect(@space,@duration);
+  }
+
+  .out-image:nth-child(8){
+    #box-effect > .back-effect(@space,@duration);
+  }
+
+  .out-image:nth-child(9){
+    #box-effect > .left-effect(@space,@duration);
+  }
+
+  .out-image:nth-child(10){
+    #box-effect > .right-effect(@space,@duration);
+  }
+
+  .out-image:nth-child(11){
+    #box-effect > .top-effect(@space,@duration);
+  }
+
+  .out-image:nth-child(12){
+    #box-effect > .bottom-effect(@space,@duration);
+  }
+}
+
+//整个立方体旋转动画
+@keyframes box-animate {
+  0%{
+    transform: rotateX(0deg) rotateY(0deg);
+  }
+
+  100%{
+    transform: rotateX(360deg) rotateY(360deg);
+  }
+}
+
+body{
+
+  background-color: #0f0f0f;
+
+  .box-container{
+
+    width: 400px;
+    margin: 300px auto;
+    position: relative;
+    transform-style: preserve-3d;
+    //使用 #box-effect中的container-effect
+    #box-effect > .container-effect;
+
+    img{
+      position: absolute;
+      opacity: 0.7;
+    }
+
+    .in-image{
+      width: @in-image-width;
+
+      @in-image-space:(@out-image-width - @in-image-width)/2;
+      left: @in-image-space;
+      top:@in-image-space;
+
+    }
+
+    .out-image{
+      width: @out-image-width;
+    }
+
+    //调用内层立方体效果
+    .in-box-effect();
+    .out-box-effect();
+  }
+
+  .box-container:hover{
+    .out-box-effect(@out-image-width,2s);
+  }
+
+}
